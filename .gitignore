@@ -1,0 +1,37 @@
+# Fichiers Java compilés
+*.class
+*.jar
+*.war
+*.ear
+
+# Dossiers de build / artefacts
+bin/
+build/
+out/
+target/
+.gradle/
+
+# IDE / éditeur
+.idea/
+.vscode/
+*.iml
+*.code-workspace
+.classpath
+.project
+.settings/
+
+# NetBeans
+nbproject/private/
+nbbuild/
+dist/
+
+# Système d'exploitation
+.DS_Store
+Thumbs.db
+
+# Fichiers temporaires
+*.tmp
+*.temp
+*.log
+
+images/
