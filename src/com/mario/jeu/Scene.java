@@ -70,11 +70,16 @@ public class Scene extends JPanel{
 	public Piece piece9;
 	public Piece piece10;
 	
+	public Champi champi1;
+	public Champi champi2;
+	public Champi champi3;
+
 	private ImageIcon IcoChateauFin;
 	private Image ImgChateauFin;
 	
 	private ArrayList<Objet> listElements;
 	private ArrayList<Piece> listBonus;
+	private ArrayList<Champi> listChampi;
 	
 	private Score score;
 	private Font police;
@@ -102,8 +107,6 @@ public class Scene extends JPanel{
 		this.ChateauImg = this.ChateauIco.getImage();
 		
 		mario = new Mario(270, 379);
-		
-		champi = new Champi(850, 429);
 		
 		tuyau1 = new Tuyau(555, 365);
 		tuyau2 = new Tuyau(1190, 365);
@@ -135,12 +138,18 @@ public class Scene extends JPanel{
 		bloc8 = new Bloc(3700, 220);
 		bloc9 = new Bloc(4100, 225);
 		bloc10 = new Bloc(4500, 250);
+
+		champi = new Champi(850, 429);
+		champi1 = new Champi(2000, 429);
+		champi2 = new Champi(3000, 429);
+		champi3 = new Champi(4000, 429);
 		
 		IcoChateauFin = new ImageIcon(getClass().getResource("/images/chateau.png"));
 		this.ImgChateauFin = this.IcoChateauFin.getImage();
 		
 		listElements = new ArrayList<Objet> ();
 		listBonus = new ArrayList<Piece> ();
+		listChampi = new ArrayList<Champi> ();
 		
 		listElements.add(this.tuyau1);
 		listElements.add(this.tuyau2);
@@ -172,7 +181,11 @@ public class Scene extends JPanel{
 		listBonus.add(this.piece8);
 		listBonus.add(this.piece9);
 		listBonus.add(this.piece10);
-		
+
+		listChampi.add(this.champi);
+		listChampi.add(this.champi1);
+		listChampi.add(this.champi2);
+		listChampi.add(this.champi3);
 		score = new Score();
 		
 		police = new Font("consolas", Font.PLAIN, 14);
@@ -235,7 +248,9 @@ public class Scene extends JPanel{
 		//detection du contact avec objet
 		for(int i=0; i<this.listElements.size(); i++) {
 			if(this.mario.near(this.listElements.get(i))) this.mario.contact(this.listElements.get(i));
-			if(this.champi.near(this.listElements.get(i))) this.champi.contact(this.listElements.get(i));
+			for(Champi c : listChampi) {
+				if(c.near(this.listElements.get(i))) c.contact(this.listElements.get(i));
+			}
 		}
 		
 		//detection piece
@@ -248,14 +263,17 @@ public class Scene extends JPanel{
 			}
 		}
 		
-		if(this.mario.near(this.champi)) {this.mario.contact(champi);}
-		
+		for(Champi c : listChampi) {
+			if(this.mario.near(c)) {this.mario.contact(c);}
+		}
 		
 		this.deplacementFond();
 		if(this.abs >=0 && this.abs <= 4990) {
 			for(int i=0;i<this.listElements.size(); i++) this.listElements.get(i).move();
 			for(int i=0; i<this.listBonus.size(); i++) this.listBonus.get(i).move();
-			this.champi.move();
+			for(Champi c : listChampi) {
+				c.move();
+			}
 		}
 		
 		g2.drawImage(this.ImgFond, this.xFond1, 0, null);  //dessin de l'image de fond
@@ -276,10 +294,12 @@ public class Scene extends JPanel{
 			g2.drawImage(this.mario.marche("mario", 25), this.mario.getX(), this.mario.getY(), null);
 		}
 		
-		if(this.champi.isAlive()) {
-			g2.drawImage(this.champi.getImgChampi(), this.champi.getX(), this.champi.getY(), null);
-		}else {
-			g2.drawImage(this.champi.die(), this.champi.getX(), this.champi.getY(), null);
+		for(Champi c : listChampi) {
+			if(c.isAlive()) {
+				g2.drawImage(c.getImgChampi(), c.getX(), c.getY(), null);
+			}else {
+				g2.drawImage(c.die(), c.getX(), c.getY(), null);
+			}
 		}
 		
 		g2.setFont(police);
